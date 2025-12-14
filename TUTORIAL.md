@@ -5,22 +5,25 @@
 This tutorial will walk you through the process of making a simple MacOS printsploit using native Mac libraries for injection (dyld) and calling the Roblox print offset externally
 
 ## Prerequisites
-Any IDA that works on MacOS (Binary Ninja preferably) -> `https://binary.ninja/free/`\
+
+IDA will work, though it takes more time to analyze so we will not be covering usage here.
+
+Any RE that works on MacOS (Binary Ninja preferably) -> `https://binary.ninja/free/`\
 Roblox **INTEL** version:
 ```bash
-curl -s "https://raw.githubusercontent.com/devnorb/MacPrintSploitTutorial/main/intelinstaller.sh" | bash
+curl -s "https://raw.githubusercontent.com/norbyv1/MacPrintSploitTutorial/main/intelinstaller.sh" | bash
 ```
 VSCode or any IDE -> `https://code.visualstudio.com/Download`\
 Basic knowledge of how Mac works\
 Common Sense
 
-(I used Binary Ninja Personal 4.1.5747, VSCode, and this tutorial was done on Roblox version `version-9a42bf606f9f44c2`)
+(Tools: Binary Ninja Personal 4.1.5747, VSCode, and this tutorial was done on Roblox version `version-9a42bf606f9f44c2`)
 
 ## Tutorial
 
 First Section:
 ### Getting print offset
-Open Binary Ninja and load `/Applications/Roblox.app/Contents/MacOS/RobloxPlayer` (Do not load /Applications/Roblox.app as it is a directory containing the main executable and dependencies!)\
+Open Binary Ninja and load `/Applications/Roblox.app/Contents/MacOS/RobloxPlayer` (Do not load /Applications/Roblox.app as it is a directory containing the main executable and dependencies)\
 If you cannot find the RobloxPlayer executable, run `open /Applications/Roblox.app/Contents/MacOS/` and then drag the RobloxPlayer executable into Binary Ninja\
 Binary Ninja will start analyzing the RobloxPlayer executable -> (Status should show `Analysis Phase 1...Analysis/Disassembling (*/*)`)\
 Open the Strings view:
@@ -33,14 +36,14 @@ After it is done analyzing the function that contains the string `Current identi
 You should see `r14_1 = sub_PRINTADDRESS(0, "Current identity is %d", 0);`\
 The print address is the sub_ function there (for `version-9a42bf606f9f44c2` it is sub_1010adc10)\
 Remove the sub_ and replace it with 0x (should look like 0x1010adc10)\
-Save the offset
+Save the offset in clipboard or anywhere that is easily retrievable
 
 Next Section:
 ### Adding C++ code
 Make a folder named `printsploit`\
-Copy and paste code -> (find code here: `https://github.com/devnorb/MacPrintSploitTutorial/blob/main/tutorial.cpp`)\
+Copy and paste code -> (find code here: `https://github.com/norbyv1/MacPrintSploitTutorial/blob/main/tutorial.cpp`)\
 Change the offset variable in main.cpp to the one you found:
- - Example: `uintptr_t offset = 0x1010adc10;` should be replaced with `uintptr_t offset = YOUR_SAVED_OFFSET;`.
+ - Example: `uintptr_t offset = 0x1010adc10;` should be replaced with `uintptr_t offset = thesavedoffsetyouhad;`.
 Save the file & name the file as main.cpp\
 Open a new VSCode terminal:
  - Go to the Mac top bar (when VSCode is **focused**), press **Terminal**, and click **New Terminal**.
@@ -55,7 +58,7 @@ Run this command in the same VSCode terminal:
 DYLD_INSERT_LIBRARIES="./printsploit.dylib" /Applications/Roblox.app/Contents/MacOS/RobloxPlayer
 ```
 Roblox should launch; join a game and open console\
-It should display the 4 console outputs (print, info, warn, error), and if it doesn't, increase the sleep time by ~5 seconds and it should work.\
+It should display the 4 console outputs (print, info, warn, error), and if it doesn't, increase the sleep time by ~5 seconds.
+
 -------------------------------------------------------------------------------------------------------------------------------------------\
-If there are any issues, feel free to contact me on Discord (@norbyv1) or make a issue here on this repository.
 Any improvements or suggestions, make a pull request.
