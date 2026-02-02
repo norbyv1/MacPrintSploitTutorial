@@ -8,8 +8,8 @@ main() {
     unzip -o -q "./RobloxPlayer.zip"
     mv "./RobloxPlayer.app" "/Applications/Roblox.app"
     rm "./RobloxPlayer.zip"
-    xattr -c /Applications/Roblox.app # removes it from quarantine 
-    codesign --remove-signature "/Applications/Roblox.app/Contents/MacOS/RobloxPlayer" # need to remove the signature to make the injection method work
+    xattr -cr /Applications/Roblox.app
+    codesign --remove-signature "/Applications/Roblox.app/Contents/MacOS/RobloxPlayer"
 }
 
 main
