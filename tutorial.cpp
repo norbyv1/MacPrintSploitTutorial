@@ -9,14 +9,14 @@ __attribute__((constructor)) void entry()
         uintptr_t offset = 0x1010adc10;
         void (*printfunction)(int, const char*, ...) = reinterpret_cast<void(*)(int, const char*, ...)>(_dyld_get_image_vmaddr_slide(0) + offset);
     
-        auto print = [&](int type, const char* message) {
-            std::chrono::milliseconds(200)
+        auto output = [&](int type, const char* message) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
             printfunction(type, message);
         };
     
-        delayprint(0, "print");
-        delayprint(1, "info");
-        delayprint(2, "warn");
-        delayprint(3, "error");
+        output(0, "print");
+        output(1, "info");
+        output(2, "warn");
+        output(3, "error");
     }).detach();
 }
