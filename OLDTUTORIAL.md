@@ -2,7 +2,7 @@
 --------------------------
 
 ## Introduction
-This tutorial will walk you through the process of making a simple MacOS printsploit using native Mac libraries for injection (dyld) and calling the Roblox print offset externally
+This tutorial will walk you through the process of making a simple MacOS printsploit using native Mac libraries for injection (dyld)
 
 ## Prerequisites
 
